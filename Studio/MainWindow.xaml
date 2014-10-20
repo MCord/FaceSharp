@@ -3,6 +3,26 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
+        <DockPanel LastChildFill="True">
+            <Menu DockPanel.Dock="Top" Width="Auto">
+                <MenuItem Header="_File">
+                    <MenuItem Header="_New" />
+                    <MenuItem Header="_Import" Click="ImportMenuClicked"/>
+                    <MenuItem Header="_Save" />
+                    <Separator />
+                    <MenuItem Header="_Exit" />
+                </MenuItem>
+            </Menu>
+            <StackPanel DockPanel.Dock="Left" >
+                <Button> TODO</Button>
+            </StackPanel>
+            <StackPanel DockPanel.Dock="Right" >
+                <Button>TODO</Button>
+            </StackPanel>
+            <Image Name="CurrentImage" x:FieldModifier="private"></Image>
+        </DockPanel>
+        
+        
         
     </Grid>
 </Window>

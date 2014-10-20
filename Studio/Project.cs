@@ -1,5 +1,6 @@
 ﻿namespace Studio
 {
+    using System.IO;
     using System.Runtime.Serialization;
 
     [DataContract]
@@ -26,6 +27,24 @@
             var instance = SerializationExtensions.Deserialize<Project>(file);
             instance.File = file;
             return instance;
+        }
+
+        public void Import(string imageFile)
+        {
+            if (System.IO.File.Exists(imageFile))
+            {
+                File = imageFile;
+                return;
+            }
+
+            throw new FileNotFoundException("The selected file does not exist.");
+        }
+
+        public static Project Create(string file)
+        {
+            var project = new Project("", "");
+            project.Import(file);
+            return project;
         }
     }
 }
