@@ -1,8 +1,6 @@
 ﻿namespace Studio
 {
-    using System;
     using System.Windows;
-    using System.Windows.Media.Imaging;
     using Microsoft.Win32;
 
     /// <summary>
@@ -10,7 +8,7 @@
     /// </summary>
     public partial class MainWindow
     {
-        private Project currentProject;
+        private ProjectViewModel viewModel;
 
         public MainWindow()
         {
@@ -29,13 +27,13 @@
 
         private void CreateNewProject(string file)
         {
-            currentProject = Project.Create(file);
+            viewModel = new ProjectViewModel(file);
             ManualBind();
         }
 
         private void ManualBind()
         {
-            CurrentImage.Source = new BitmapImage(new Uri(currentProject.File));
+            CurrentImage.Source = viewModel.CurrentImage;
         }
     }
 }
