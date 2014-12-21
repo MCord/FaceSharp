@@ -34,6 +34,7 @@
             if (System.IO.File.Exists(imageFile))
             {
                 File = imageFile;
+                Storage.SaveData(StorageItem.LastLoadedImage, imageFile);
                 return;
             }
 

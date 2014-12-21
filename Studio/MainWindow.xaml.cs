@@ -13,6 +13,12 @@
         public MainWindow()
         {
             InitializeComponent();
+            var lastProj = Storage.LoadData(StorageItem.LastLoadedImage);
+
+            if (lastProj != null)
+            {
+                CreateNewProject(lastProj);
+            }
         }
 
         private void ImportMenuClicked(object sender, RoutedEventArgs e)
