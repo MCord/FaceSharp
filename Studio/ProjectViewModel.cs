@@ -12,18 +12,39 @@
     public class ProjectViewModel : INotifyPropertyChanged
     {
         private readonly Image container;
-        public string ImageFile { get; set; }
+
+        public string ImageFile
+        {
+            get { return imageFile; }
+            set
+            {
+                imageFile = value;
+                OnPropertyChanged();
+                CalculateRatio();
+                OnPropertyChanged("OriginalFeatures");
+            }
+        }
+
         private readonly Project project;
+        private string imageFile;
         public List<FacialFeature> OriginalFeatures { get; }
 
         public double ImageXRatio { get; private set; }
 
         private void CalculateRatio()
         {
+            if (container.Source == null)
+            {
+                return;
+            }
+
             var imageSource = (BitmapSource)container.Source;
 
             ImageXRatio =  container.RenderSize.Width /(imageSource.PixelWidth);
             ImageYRatio =  container.RenderSize.Height /(imageSource.PixelHeight);
+
+            OnPropertyChanged("ImageXRatio");
+            OnPropertyChanged("ImageYRatio");
         }
 
         public double ImageYRatio { get; private set; }

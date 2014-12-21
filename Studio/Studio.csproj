@@ -63,7 +63,6 @@
     <Compile Include="FaceDetection\FacialFeature.cs" />
     <Compile Include="FaceDetection\IFaceAnalyzer.cs" />
     <Compile Include="FaceDetection\LuxlandRecognitionEngine.cs" />
-    <Compile Include="OverlayImage.cs" />
     <Compile Include="PointToMargin.cs" />
     <Compile Include="ProjectViewModel.cs" />
     <Compile Include="Properties\Annotations.cs" />

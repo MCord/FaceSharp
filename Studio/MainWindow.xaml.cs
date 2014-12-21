@@ -9,8 +9,6 @@
     /// </summary>
     public partial class MainWindow
     {
-        private ProjectViewModel viewModel;
-
         public MainWindow()
         {
                 InitializeComponent();
@@ -33,7 +31,6 @@
             {
                 CreateNewProject(lastProj);
             }
-            DataContext = viewModel;
         }
 
         private void ImportMenuClicked(object sender, RoutedEventArgs e)
@@ -48,7 +45,7 @@
 
         private void CreateNewProject(string file)
         {
-            viewModel = new ProjectViewModel(file, ImageControl);
+            DataContext = new ProjectViewModel(file, ImageControl);
         }
     }
 }
