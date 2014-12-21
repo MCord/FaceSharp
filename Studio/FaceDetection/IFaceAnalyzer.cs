@@ -1,18 +1,10 @@
 ﻿namespace Studio
 {
     using System.Collections.Generic;
-    using System.Windows;
-    using System.Windows.Media;
+    using System.Drawing;
 
     interface IFaceAnalyzer
     {
-        IEnumerable<IFacialFeature> ExtractFacialFeatures(ImageSource image);
-    }
-
-    interface IFacialFeature
-    {
-        int Id { get; }
-        string Name { get; }
-        Point Location { get; }
+        IEnumerable<FacialFeature> ExtractFacialFutures(Image image);
     }
 }
