@@ -10,13 +10,18 @@
     {
         public LuxlandRecognitionEngine()
         {
-            Assert(FSDK.ActivateLibrary(@"Vb0WOZCv5EEleDfQtp7PVQizy6dtlaQfvkiBBHSynzcZDOF038lr/uF8mEC2O+BPivfsWwubTdUDBklKhEI22sZpsQPxusxhJHT9aIqsUtS+Oufq/hFKdipAS6eU2Jj5Ikkdob3d4CYF3ttFuaf/I/R4MTQVkEYxOJYMtefKyP8="));
+            Assert(FSDK.ActivateLibrary(@"jMmpgjZQzxx+fFWCk+G9EiSKGw8H62oGHNemGuRsGaaTfSPqJncN0KTPlu3WnVh9mqrWJWp2E2pAbT+L7licvpIQTW12R17rto/LNUPf+B8eMuVYhvJC4T5A74f4DyoQhWxwgNkLzjgz4RtrvHD1sUZ+M3F/WnMQXP0xZ0Z6d+U="));
             Assert(FSDK.InitializeLibrary());
         }
 
 
         private static void Assert(int returnCode)
         {
+            if (returnCode == FSDK.FSDKE_NOT_ACTIVATED)
+            {
+                throw new Exception("You Luxand license has expired.");
+            }
+
             if (returnCode != 0)
             {
                 throw new Exception("Luxland sdk failed with error:" + returnCode);

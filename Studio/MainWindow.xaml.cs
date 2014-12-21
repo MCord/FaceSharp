@@ -1,5 +1,6 @@
 ﻿namespace Studio
 {
+    using System;
     using System.Windows;
     using Microsoft.Win32;
 
@@ -12,13 +13,27 @@
 
         public MainWindow()
         {
-            InitializeComponent();
+                InitializeComponent();
+            try
+            {
+                LoadLastProject();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(),"Startup error", MessageBoxButton.OK,MessageBoxImage.Error);
+            }
+         
+        }
+
+        private void LoadLastProject()
+        {
             var lastProj = Storage.LoadData(StorageItem.LastLoadedImage);
 
             if (lastProj != null)
             {
                 CreateNewProject(lastProj);
             }
+            DataContext = viewModel;
         }
 
         private void ImportMenuClicked(object sender, RoutedEventArgs e)
@@ -33,13 +48,7 @@
 
         private void CreateNewProject(string file)
         {
-            viewModel = new ProjectViewModel(file);
-            ManualBind();
-        }
-
-        private void ManualBind()
-        {
-            CurrentImage.Source = viewModel.CurrentImage;
+            viewModel = new ProjectViewModel(file, ImageControl);
         }
     }
 }

@@ -4,9 +4,9 @@ namespace Studio
 
     public class FacialFeature
     {
-        int Id { get; }
-        string Name { get; }
-        Point Location { get; }
+        public int Id { get; }
+        public string Name { get; }
+        public Point Location { get; }
 
         public FacialFeature(int id, string name, Point location)
         {
