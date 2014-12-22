@@ -63,6 +63,10 @@
     <Compile Include="FaceDetection\FacialFeature.cs" />
     <Compile Include="FaceDetection\IFaceAnalyzer.cs" />
     <Compile Include="FaceDetection\LuxlandRecognitionEngine.cs" />
+    <Compile Include="ImageUtils.cs" />
+    <Compile Include="INormalization.cs" />
+    <Compile Include="RotationNormalization.cs" />
+    <Compile Include="NormalizationCommand.cs" />
     <Compile Include="PointToMargin.cs" />
     <Compile Include="ProjectViewModel.cs" />
     <Compile Include="Properties\Annotations.cs" />

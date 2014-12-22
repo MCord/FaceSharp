@@ -42,6 +42,11 @@
             FSDK.DetectFacialFeatures(img, out points);
             FSDK.FreeImage(img);
 
+            if (points == null)
+            {
+                return Enumerable.Empty<FacialFeature>();
+            }
+
             return points.Select((t, i) => new FacialFeature(i, GetPointName(i), new Point(t.x, t.y)));
         }
     }

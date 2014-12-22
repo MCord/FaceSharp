@@ -1,64 +1,50 @@
 ﻿namespace Studio
 {
-    using System.Collections.Generic;
     using System.ComponentModel;
-    using System.Drawing;
-    using System.Linq;
     using System.Runtime.CompilerServices;
     using System.Windows.Media.Imaging;
     using Annotations;
-    using Image = System.Windows.Controls.Image;
+    using System.Windows.Controls;
+    using System.Windows.Input;
 
     public class ProjectViewModel : INotifyPropertyChanged
     {
-        private readonly Image container;
+        private readonly Image imageViewControl;
 
-        public string ImageFile
-        {
-            get { return imageFile; }
-            set
-            {
-                imageFile = value;
-                OnPropertyChanged();
-                CalculateRatio();
-                OnPropertyChanged("OriginalFeatures");
-            }
-        }
-
-        private readonly Project project;
-        private string imageFile;
-        public List<FacialFeature> OriginalFeatures { get; }
+        public Project Project { get; }
+        
 
         public double ImageXRatio { get; private set; }
+        public double ImageYRatio { get; private set; }
+
+        public ICommand NomalizeCommand => new NormalizationCommand();
 
         private void CalculateRatio()
         {
-            if (container.Source == null)
+            if (imageViewControl.Source == null)
             {
                 return;
             }
 
-            var imageSource = (BitmapSource)container.Source;
+            var imageSource = (BitmapSource)imageViewControl.Source;
 
-            ImageXRatio =  container.RenderSize.Width /(imageSource.PixelWidth);
-            ImageYRatio =  container.RenderSize.Height /(imageSource.PixelHeight);
+            ImageXRatio =  imageViewControl.RenderSize.Width /(imageSource.PixelWidth);
+            ImageYRatio =  imageViewControl.RenderSize.Height /(imageSource.PixelHeight);
 
             OnPropertyChanged("ImageXRatio");
             OnPropertyChanged("ImageYRatio");
         }
 
-        public double ImageYRatio { get; private set; }
+        
 
         
 
-        public ProjectViewModel(string imageFile, Image container)
+        public ProjectViewModel(string imageFile, Image imageViewControl)
         {
-            this.container = container;
-            ImageFile = imageFile;
-            project = Project.Create(imageFile);
-            var analayzer = new LuxlandRecognitionEngine();
-            OriginalFeatures = analayzer.ExtractFacialFutures(new Bitmap(imageFile)).ToList();
-            container.SizeChanged += (sender, args) =>
+            Project = Project.Create(imageFile);
+            this.imageViewControl = imageViewControl;
+            
+            imageViewControl.SizeChanged += (sender, args) =>
             {
                 CalculateRatio();
 
