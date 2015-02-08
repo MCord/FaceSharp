@@ -16,7 +16,7 @@ namespace Studio
         {
             var project = (Project)parameter;
 
-            project.ApplyNormalization(new RotationNormalization());
+            //project.ApplyNormalization(new RotationNormalization());
             //project.ApplyNormalization(new MoveNormalization());
 
             CanExecuteChanged?.Invoke(this, null);

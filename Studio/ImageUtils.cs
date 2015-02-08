@@ -34,6 +34,22 @@
                 return bitmap;
             }
         }
+        // Conversion code
+        public static BitmapImage ToBitmapImage(this BitmapSource bitmapSource)
+        {
+            JpegBitmapEncoder encoder = new JpegBitmapEncoder();
+            MemoryStream memorystream = new MemoryStream();
+            BitmapImage tmpImage = new BitmapImage();
+            encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
+            encoder.Save(memorystream);
+
+            tmpImage.BeginInit();
+            tmpImage.StreamSource = new MemoryStream(memorystream.ToArray());
+            tmpImage.EndInit();
+
+            memorystream.Close();
+            return tmpImage;
+        }
 
         public static BitmapImage ToBitmapImage(this Bitmap newImg)
         {
