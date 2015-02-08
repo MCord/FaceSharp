@@ -1,6 +1,7 @@
 ﻿namespace Studio
 {
     using System.Drawing;
+    using System.Drawing.Imaging;
     using System.IO;
     using System.Windows.Media.Imaging;
 
@@ -31,6 +32,21 @@
                 bitmap.StreamSource = ms;
                 bitmap.EndInit();
                 return bitmap;
+            }
+        }
+
+        public static BitmapImage ToBitmapImage(this Bitmap newImg)
+        {
+            using (MemoryStream memory = new MemoryStream())
+            {
+                newImg.Save(memory, ImageFormat.Png);
+                memory.Position = 0;
+                var bitmapImage = new BitmapImage();
+                bitmapImage.BeginInit();
+                bitmapImage.StreamSource = memory;
+                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                bitmapImage.EndInit();
+                return bitmapImage;
             }
         }
     }

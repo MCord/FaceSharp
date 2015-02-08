@@ -6,7 +6,7 @@ namespace Studio
     {
         public int Id { get; }
         public string Name { get; }
-        public Point Location { get; }
+        public Point Location { get; set; }
 
         public FacialFeature(int id, string name, Point location)
         {

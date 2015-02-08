@@ -4,9 +4,6 @@
         xmlns:studio="clr-namespace:Studio" xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525" d:DataContext="{d:DesignInstance studio:ProjectViewModel }">
-    <Window.Resources>
-        <studio:PointToMargin x:Key="PointToMarginConvertor" />
-    </Window.Resources>
     <Grid>
         <DockPanel LastChildFill="True">
             <Menu DockPanel.Dock="Top" Width="Auto">
@@ -26,26 +23,7 @@
                 <Button>TODO</Button>
             </StackPanel>
             <Grid>
-                <Image Source="{Binding Project.CurrentImage}" Stretch="Uniform" Name="ImageControl" HorizontalAlignment="Left"/>
-                <Canvas>
-                    <ItemsControl  Background="Transparent"  ItemsSource="{Binding Path= Project.OriginalFeatures}" Width="{Binding ElementName=ImageControl, Path=Width}"
-                        Height="{Binding ElementName=ImageControl, Path=Height}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Ellipse Fill="Chocolate" Height="3" Width="3" StrokeThickness="1" Stroke="Indigo" Margin="{Binding Location, Converter={StaticResource PointToMarginConvertor}}" />
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <Canvas IsItemsHost="True">
-                                    <Canvas.RenderTransform>
-                                        <ScaleTransform ScaleX="{Binding ImageXRatio}" ScaleY="{Binding ImageYRatio}"/>
-                                    </Canvas.RenderTransform>
-                                </Canvas>
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                    </ItemsControl>
-                </Canvas>
+                <Image Source="{Binding Project.OverlayedImage}" Stretch="Fill" Name="ImageControl" HorizontalAlignment="Left" />
             </Grid>
         </DockPanel>
 

@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Drawing;
+    using System.Drawing.Imaging;
     using System.IO;
     using System.Linq;
     using System.Runtime.CompilerServices;
@@ -16,7 +17,7 @@
     {
         private BitmapImage currentImage;
         public List<INormalization> Normalizations;
-        public List<FacialFeature> OriginalFeatures { get; private set; }
+        public List<FacialFeature> Features { get; private set; }
         readonly LuxlandRecognitionEngine analayzer;
         private Project(string file, string name)
         {
@@ -29,14 +30,33 @@
         public string File { get; private set; }
         public BitmapImage OriginalImage { get; private set; }
 
+        public BitmapImage OverlayedImage => AddOverlay(currentImage);
+
         public BitmapImage CurrentImage
         {
-            get { return currentImage; }
+            get
+            {
+                return currentImage;
+            }
             set
             {
                 currentImage = value;
                 OnPropertyChanged();
             }
+        }
+
+        private BitmapImage AddOverlay(BitmapImage bitmapImage)
+        {
+            var image = new Bitmap(bitmapImage.PixelWidth, bitmapImage.PixelHeight,PixelFormat.Format32bppArgb);
+            var g = Graphics.FromImage(image);
+
+            g.DrawImage(bitmapImage.ToBitmap(), 0,0);
+            foreach (var f in Features)
+            {
+                g.DrawEllipse(Pens.Magenta, f.Location.X, f.Location.Y, 2, 3);
+            }
+            
+            return image.ToBitmapImage();
         }
 
         public string Name { get; private set; }
@@ -72,8 +92,8 @@
 
         private void ReCalculateFeatures(Bitmap image)
         {
-            OriginalFeatures = analayzer.ExtractFacialFutures(image).ToList();
-            OnPropertyChanged("OriginalFeatures");
+            Features = analayzer.ExtractFacialFutures(image).ToList();
+            OnPropertyChanged("Features");
         }
 
         public static Project Create(string file)
@@ -83,15 +103,20 @@
             return project;
         }
 
-        public void ApplyNormalization(RotationNormalization norm)
+        public void ApplyNormalization(INormalization norm)
         {
-            CurrentImage = norm.Apply(CurrentImage, OriginalFeatures);
-            ReCalculateFeatures(CurrentImage.ToBitmap());
+            CurrentImage = norm.Apply(CurrentImage, Features);
+            OnPropertyChanged("Features");
         }
 
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
+            if (propertyName == "CurrentImage")
+            {
+                OnPropertyChanged("OverlayedImage");
+            }
+
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }

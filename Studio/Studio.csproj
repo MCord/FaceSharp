@@ -65,7 +65,8 @@
     <Compile Include="FaceDetection\LuxlandRecognitionEngine.cs" />
     <Compile Include="ImageUtils.cs" />
     <Compile Include="INormalization.cs" />
-    <Compile Include="RotationNormalization.cs" />
+    <Compile Include="Normalization\MoveNormalization.cs" />
+    <Compile Include="Normalization\RotationNormalization.cs" />
     <Compile Include="NormalizationCommand.cs" />
     <Compile Include="PointToMargin.cs" />
     <Compile Include="ProjectViewModel.cs" />
