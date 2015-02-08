@@ -9,9 +9,11 @@
     using System.Linq;
     using System.Runtime.CompilerServices;
     using System.Runtime.Serialization;
+    using System.Windows;
     using System.Windows.Media.Imaging;
     using Annotations;
     using Graphics;
+    using Point = System.Drawing.Point;
 
     [DataContract]
     public class Project : INotifyPropertyChanged
@@ -84,8 +86,6 @@
                 
                 ReCalculateFeatures(OriginalImage.ToBitmap());
 
-                CurrentImage = WarpImage(OriginalImage).ToBitmapImage();
-
                 Storage.SaveData(StorageItem.LastLoadedImage, imageFile);
                 return;
             }
@@ -93,25 +93,8 @@
             throw new FileNotFoundException("The selected file does not exist.");
         }
 
-        private WriteableBitmap WarpImage(BitmapImage originalImage)
-        {
-            var rand = new Random();
+       
 
-            var mlsAlgo = new MovingLeastSquaresRectGrid();
-
-            var originalPoints = Features.Select(f => f.Location).Select(l => new System.Windows.Point(l.X, l.Y)).ToArray();
-            var transformPoint = originalPoints.Select(o => new System.Windows.Point(o.X + 100 * rand.NextDouble(), o.Y-5)).ToArray();
-
-            var pixels = Image2PixelArray.GetPixelsTopLeft(originalImage);
-
-            int h = Image2PixelArray.GetH(pixels);
-            int w = Image2PixelArray.GetW(pixels);
-
-
-            mlsAlgo.InitBeforeComputation(originalPoints, transformPoint, h, w, 20);
-
-            return mlsAlgo.WarpImage(pixels, originalImage.DpiX, originalImage.DpiY);
-        }
 
         private void ReCalculateFeatures(Bitmap image)
         {
