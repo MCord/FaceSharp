@@ -1,10 +1,11 @@
-﻿namespace Studio.Graphics
-{
-    using System;
-    using System.Windows;
+using System;
+using System.Windows;
 
+namespace WarpImage
+{
     public class MeshPointV
     {
+        private readonly double ToSmallHeuristic = double.Epsilon;
         // Matrix representation M, 
         // Mt M == I, so m21=-m12 and m22 = m11
         public double m11, m12;
@@ -22,7 +23,6 @@
         private double wSum;
         // Point v
         public double x, y;
-        private readonly double ToSmallHeuristic = double.Epsilon;
         // If meshpoints are reused, reset by parametersComputed=false
         //public Boolean parametersComputed = false;
         public void ComputeTransformationParameters(double _x, double _y, int _nPoint, Point[] _p, Point[] _q)

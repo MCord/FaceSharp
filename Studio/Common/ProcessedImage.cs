@@ -8,30 +8,34 @@ namespace Studio.Common
 {
     public class ProcessedImage
     {
-        private readonly List<FacialFeature> extractedFeatures;
-        private readonly Image image;
+        public readonly List<FacialFeature> ExtractedFeatures;
+        public readonly Image Image;
 
         public ProcessedImage(Image image, List<FacialFeature> extractedFeatures)
         {
-            this.image = image;
-            this.extractedFeatures = extractedFeatures;
+            this.Image = image;
+            this.ExtractedFeatures = extractedFeatures;
         }
 
         public ProcessedImage Process(Func<Image, Image> operation, Func<List<FacialFeature>, List<FacialFeature>> featureOperation = null)
         {
             featureOperation = featureOperation ?? (list => list);
+            return new ProcessedImage(operation(Image), featureOperation(ExtractedFeatures));
+        }
 
-            return new ProcessedImage(operation(image), featureOperation(extractedFeatures));
+        public ProcessedImage Process(Func<Image, List<FacialFeature>, ProcessedImage> operation)
+        {
+            return operation(Image, ExtractedFeatures);
         }
 
         public Point this[int index]
         {
-            get { return extractedFeatures.First(f => f.Id == index).Location; }
+            get { return ExtractedFeatures.First(f => f.Id == index).Location; }
         }
 
         public void Save(string file)
         {
-            image.Save(file,ImageFormat.Jpeg);
+            Image.Save(file,ImageFormat.Jpeg);
         }
     }
 }

@@ -16,21 +16,15 @@ namespace Studio.Common
 
         public ProcessedImage Process(ProcessedImage source)
         {
-            return source.Process(i => SetImageOpacity(i, opacity));
+            return source.Process(i => MergeWithOpacity(opacity, i));
         }
 
-        /// <summary>  
-        /// method for changing the opacity of an image  
-        /// </summary>  
-        /// <param name="image">image to set opacity on</param>  
-        /// <param name="opacity">percentage of opacity</param>  
-        /// <returns></returns>  
-        public static Image SetImageOpacity(Image image, float opacity)
+        public static Image MergeWithOpacity(float opacity, params Image[] images)
         {
             try
             {
                 //create a Bitmap the size of the image provided  
-                Bitmap bmp = new Bitmap(image.Width, image.Height);
+                Bitmap bmp = new Bitmap(images[0].Width, images[0].Height);
 
                 //create a graphics object from the image  
                 using (System.Drawing.Graphics gfx = System.Drawing.Graphics.FromImage(bmp))
@@ -40,7 +34,7 @@ namespace Studio.Common
                     ColorMatrix matrix = new ColorMatrix();
 
                     //set the opacity  
-                    matrix.Matrix33 = (float)opacity;
+                    matrix.Matrix33 = opacity;
 
                     //create image attributes  
                     ImageAttributes attributes = new ImageAttributes();
@@ -49,7 +43,10 @@ namespace Studio.Common
                     attributes.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
 
                     //now draw the image  
-                    gfx.DrawImage(image, new Rectangle(0, 0, bmp.Width, bmp.Height), 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, attributes);
+                    foreach (var image in images)
+                    {
+                        gfx.DrawImage(image, new Rectangle(0, 0, bmp.Width, bmp.Height), 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, attributes);
+                    }
                 }
                 return bmp;
             }

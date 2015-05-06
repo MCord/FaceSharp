@@ -9,11 +9,8 @@
     using System.Linq;
     using System.Runtime.CompilerServices;
     using System.Runtime.Serialization;
-    using System.Windows;
     using System.Windows.Media.Imaging;
     using Annotations;
-    using Graphics;
-    using Point = System.Drawing.Point;
 
     [DataContract]
     public class Project : INotifyPropertyChanged

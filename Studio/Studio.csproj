@@ -64,18 +64,21 @@
     <Compile Include="Common\FaceCenteredCropProcessor.cs" />
     <Compile Include="Common\IImageProcessor.cs" />
     <Compile Include="Common\ImageOpacityProcessor.cs" />
+    <Compile Include="Common\ImageProcessing\Warp\Conversions.cs" />
+    <Compile Include="Common\ImageProcessing\Warp\Image2PixelArray.cs" />
+    <Compile Include="Common\ImageProcessing\Warp\MeshPointV.cs" />
+    <Compile Include="Common\ImageProcessing\Warp\MovingLeastSquaresRectGrid.cs" />
+    <Compile Include="Common\ImageProcessing\Warp\PixelColor.cs" />
+    <Compile Include="Common\ImageProcessing\Warp\PixelHsv.cs" />
     <Compile Include="Common\ImageProcessorChain.cs" />
     <Compile Include="Common\ImageRotator.cs" />
     <Compile Include="Common\ImageScaler.cs" />
     <Compile Include="Common\NormalizedFaceSizeImageScaler.cs" />
     <Compile Include="Common\ProcessedImage.cs" />
+    <Compile Include="Common\WarpImageProcessor.cs" />
     <Compile Include="FaceDetection\FacialFeature.cs" />
     <Compile Include="FaceDetection\IFaceAnalyzer.cs" />
     <Compile Include="FaceDetection\LuxlandRecognitionEngine.cs" />
-    <Compile Include="Graphics\Image2PixelArray.cs" />
-    <Compile Include="Graphics\MeshPointV.cs" />
-    <Compile Include="Graphics\MovingLeastSquaresRectGrid.cs" />
-    <Compile Include="Graphics\PixelColor.cs" />
     <Compile Include="ImageManipulator.cs" />
     <Compile Include="ImageUtils.cs" />
     <Compile Include="INormalization.cs" />
@@ -87,7 +90,6 @@
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="SerializationExtensions.cs" />
     <Compile Include="Storage.cs" />
-    <Compile Include="WarpCommand.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
