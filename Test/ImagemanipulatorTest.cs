@@ -10,7 +10,7 @@ namespace Test
         {
             var im = new ImageManipulator();
 
-            im.NormalizeFolder(@"I:\Row-pic");
+            im.NormalizeFolder(@"H:\Source");
         }
     }
 }

@@ -60,6 +60,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Common\AutoFaceTiltProcessor.cs" />
+    <Compile Include="Common\FaceCenteredCropProcessor.cs" />
+    <Compile Include="Common\IImageProcessor.cs" />
+    <Compile Include="Common\ImageOpacityProcessor.cs" />
+    <Compile Include="Common\ImageProcessorChain.cs" />
+    <Compile Include="Common\ImageRotator.cs" />
+    <Compile Include="Common\ImageScaler.cs" />
+    <Compile Include="Common\NormalizedFaceSizeImageScaler.cs" />
+    <Compile Include="Common\ProcessedImage.cs" />
     <Compile Include="FaceDetection\FacialFeature.cs" />
     <Compile Include="FaceDetection\IFaceAnalyzer.cs" />
     <Compile Include="FaceDetection\LuxlandRecognitionEngine.cs" />
