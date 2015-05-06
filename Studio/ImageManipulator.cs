@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using Studio.Common;
@@ -10,17 +8,11 @@ namespace Studio
 {
     public class ImageManipulator
     {
-        private const int ImageSize = 500;
-        private readonly LuxlandRecognitionEngine _engine;
+        private readonly LuxlandRecognitionEngine engine;
 
         public ImageManipulator()
         {
-            _engine = new LuxlandRecognitionEngine();
-        }
-
-        private Point FindFaceCenter(List<FacialFeature> features)
-        {
-            return features.First(f => f.Id == 22).Location;
+            engine = new LuxlandRecognitionEngine();
         }
 
         public void NormalizeFolder(string path)
@@ -45,7 +37,7 @@ namespace Studio
 
             foreach (var image in images)
             {
-                var features = _engine.ExtractFacialFutures(image).ToList();
+                var features = engine.ExtractFacialFutures(image).ToList();
 
                 if (!features.Any())
                 {
