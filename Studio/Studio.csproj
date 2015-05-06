@@ -67,6 +67,7 @@
     <Compile Include="Graphics\MeshPointV.cs" />
     <Compile Include="Graphics\MovingLeastSquaresRectGrid.cs" />
     <Compile Include="Graphics\PixelColor.cs" />
+    <Compile Include="ImageManipulator.cs" />
     <Compile Include="ImageUtils.cs" />
     <Compile Include="INormalization.cs" />
     <Compile Include="Normalization\MoveNormalization.cs" />
@@ -118,7 +119,9 @@
     <None Include="Readme.md" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Lib\luxland\facesdk.dll">

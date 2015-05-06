@@ -7,7 +7,7 @@
     using Luxand;
     using Properties;
 
-    internal class LuxlandRecognitionEngine : IFaceAnalyzer
+    public class LuxlandRecognitionEngine : IFaceAnalyzer
     {
         public LuxlandRecognitionEngine()
         {

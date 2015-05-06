@@ -1,10 +1,9 @@
-﻿namespace Test
-{
-    using System;
-    using System.IO;
-    using Studio;
-    using Xunit;
+﻿using System.Drawing;
+using Studio;
+using Xunit;
 
+namespace Test
+{
     public class ProjectTests
     {
         [Fact]
@@ -12,7 +11,7 @@
         {
             //const string file = "file";
             //var expected = new Project(file, "TestProject");
-            
+
 
             //expected.Save();
             //Console.Write(File.ReadAllText(file));
