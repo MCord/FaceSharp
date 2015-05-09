@@ -16,10 +16,12 @@ namespace Studio.Common
         private static readonly MovingLeastSquaresRectGrid _mls = new MovingLeastSquaresRectGrid();
 
         private readonly List<Point> targetPointSet;
+        private readonly int stepSize;
 
-        public WarpImageProcessor(List<Point> targetPointSet)
+        public WarpImageProcessor(List<Point> targetPointSet, int stepSize)
         {
             this.targetPointSet = targetPointSet;
+            this.stepSize = stepSize;
         }
 
         public ProcessedImage Process(ProcessedImage source)
@@ -31,7 +33,7 @@ namespace Studio.Common
         {
             var sourcePoints = GetSourcePoints(features);
 
-            _mls.InitBeforeComputation(Convert(sourcePoints), Convert(targetPointSet), arg.Height, arg.Width);
+            _mls.InitBeforeComputation(Convert(sourcePoints), Convert(targetPointSet), arg.Height, arg.Width, stepSize);
 
             var convertBitmap = ConvertBitmap((Bitmap)arg);
             var pixels = Image2PixelArray.GetPixelsTopLeft(convertBitmap);

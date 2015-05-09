@@ -18,6 +18,7 @@
         public double ImageYRatio { get; private set; }
 
         public ICommand NomalizeCommand => new NormalizationCommand();
+        public ICommand NomalizerToolCommand => new NormalizationToolCommand();
 
         private void CalculateRatio()
         {

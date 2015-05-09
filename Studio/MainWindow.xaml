@@ -11,10 +11,12 @@
                     <MenuItem Header="_New" />
                     <MenuItem Header="_Import" Click="ImportMenuClicked"/>
                     <MenuItem Header="_Normalize" Command="{Binding NomalizeCommand}" CommandParameter="{Binding Project}"/>
-                    <MenuItem Header="_Warp" Command="{Binding WarpCommand}" CommandParameter="{Binding Project}"/>
                     <MenuItem Header="_Save" />
                     <Separator />
                     <MenuItem Header="_Exit" />
+                </MenuItem>
+                <MenuItem Header="_Tools">
+                    <MenuItem Header="_Normalizer" Command="{Binding NomalizerToolCommand}" CommandParameter="{Binding Project}"/>
                 </MenuItem>
             </Menu>
             <StackPanel DockPanel.Dock="Left" >

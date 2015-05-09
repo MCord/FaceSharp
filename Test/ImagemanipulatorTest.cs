@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using Studio;
+using Studio.Normalization;
 
 namespace Test
 {
@@ -8,9 +9,17 @@ namespace Test
         [Test]
         public void Test()
         {
-            var im = new ImageManipulator();
+            var settings = new NormalizationSetting
+            {
+                SourceFolder = @"H:\Source",
+                TargetFolder = @"H:\PI"
+            };
 
-            im.NormalizeFolder(@"H:\Source");
+
+            settings.SerializeToFile(@"H:\Norm.xml");
+
+            var im = new ImageManipulator(settings);
+            im.Normalize();
         }
     }
 }

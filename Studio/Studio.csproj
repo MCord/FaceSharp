@@ -79,12 +79,15 @@
     <Compile Include="FaceDetection\FacialFeature.cs" />
     <Compile Include="FaceDetection\IFaceAnalyzer.cs" />
     <Compile Include="FaceDetection\LuxlandRecognitionEngine.cs" />
-    <Compile Include="ImageManipulator.cs" />
+    <Compile Include="Normalization\ImageManipulator.cs" />
     <Compile Include="ImageUtils.cs" />
     <Compile Include="INormalization.cs" />
+    <Compile Include="NormalizationToolCommand.cs" />
     <Compile Include="Normalization\MoveNormalization.cs" />
+    <Compile Include="Normalization\NormalizationSetting.cs" />
     <Compile Include="Normalization\RotationNormalization.cs" />
     <Compile Include="NormalizationCommand.cs" />
+    <Compile Include="Normalization\SourcedImage.cs" />
     <Compile Include="PointToMargin.cs" />
     <Compile Include="ProjectViewModel.cs" />
     <Compile Include="Properties\Annotations.cs" />
@@ -140,9 +143,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Transformation\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
