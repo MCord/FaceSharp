@@ -1,5 +1,5 @@
 using System;
-using System.Windows;
+using System.Drawing;
 
 namespace WarpImage
 {
@@ -13,11 +13,11 @@ namespace WarpImage
         // If all Meshpoints are computed and stored, consider making nPoint, p and q static
         // then in common for all intances of p,q
         public int nPoint;
-        public Point[] p;
-        private Point[] pHat;
+        public PointF[] p;
+        private PointF[] pHat;
         private double pStarX, pStarY;
-        public Point[] q;
-        private Point[] qHat;
+        public PointF[] q;
+        private PointF[] qHat;
         private double qStarX, qStarY;
         private double[] w;
         private double wSum;
@@ -25,7 +25,7 @@ namespace WarpImage
         public double x, y;
         // If meshpoints are reused, reset by parametersComputed=false
         //public Boolean parametersComputed = false;
-        public void ComputeTransformationParameters(double _x, double _y, int _nPoint, Point[] _p, Point[] _q)
+        public void ComputeTransformationParameters(double _x, double _y, int _nPoint, PointF[] _p, PointF[] _q)
         {
             // Given the complexity(=very simple) of datastructures I use here variables internal in class 
             // and internal functions without parameters
@@ -108,16 +108,16 @@ namespace WarpImage
 
         private void Compute_pHat_qHat()
         {
-            pHat = new Point[nPoint];
-            qHat = new Point[nPoint];
+            pHat = new PointF[nPoint];
+            qHat = new PointF[nPoint];
 
             for (var i = 0; (i < nPoint); i++)
             {
-                pHat[i].X = p[i].X - pStarX;
-                pHat[i].Y = p[i].Y - pStarY;
+                pHat[i].X = (float) (p[i].X - pStarX);
+                pHat[i].Y = (float) (p[i].Y - pStarY);
 
-                qHat[i].X = q[i].X - qStarX;
-                qHat[i].Y = q[i].Y - qStarY;
+                qHat[i].X = (float) (q[i].X - qStarX);
+                qHat[i].Y = (float) (q[i].Y - qStarY);
             }
         }
 
@@ -163,9 +163,9 @@ namespace WarpImage
         }
 
         // Transform a point using the transformation parameters of this MeshPoint
-        public Point TransformL(Point p)
+        public PointF TransformL(Point p)
         {
-            var pos = new Point();
+            var pos = new PointF();
 
             if (nPoint <= 0)
             {
@@ -177,8 +177,8 @@ namespace WarpImage
             var yt = (p.Y - pStarY);
 
             // Matrix M, pos.Y= m12*x+ m22*y =..; use m21=-m12 and m22 = m11
-            pos.X = m11*xt - m12*yt + qStarX;
-            pos.Y = m12*xt + m11*yt + qStarY;
+            pos.X = (float) (m11*xt - m12*yt + qStarX);
+            pos.Y = (float) (m12*xt + m11*yt + qStarY);
 
             return pos;
         }

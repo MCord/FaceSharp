@@ -1,5 +1,5 @@
 using System;
-using System.Windows;
+using System.Drawing;
 using System.Windows.Media.Imaging;
 
 namespace WarpImage
@@ -16,8 +16,8 @@ namespace WarpImage
         // static double alpha = 2.0; 
 
         public int nPoint;
-        public Point[] p;
-        public Point[] q;
+        public PointF[] p;
+        public PointF[] q;
         // We will compute v at points (ix,iy) if (vXCompute[ix] && vYCompute[iy])
         private bool[] vXCompute;
         private bool[] vYCompute;
@@ -43,7 +43,7 @@ namespace WarpImage
             vYCompute[ImgH - 1] = true;
         }
 
-        public void InitBeforeComputation(Point[] _p, Point[] _q, int _ImgH, int _ImgW, int stepSize = 10)
+        public void InitBeforeComputation(PointF[] _p, PointF[] _q, int _ImgH, int _ImgW, int stepSize = 10)
         {
             p = _p;
             q = _q;
@@ -84,9 +84,9 @@ namespace WarpImage
             // - Interpolate between rows with coordinates computed by MeshPointV by 
             //   using InterpolateVRow(iy,iy1,iy2,Row1,Row2)
 
-            var xyRow1 = new Point[ImgW];
-            var xyRow2 = new Point[ImgW];
-            var xyRow = new Point[ImgW];
+            var xyRow1 = new PointF[ImgW];
+            var xyRow2 = new PointF[ImgW];
+            var xyRow = new PointF[ImgW];
             xyRow2 = ComputeVAndInterpolateXYRow(0);
             var iyRow1 = 0;
             var iyRow2 = 0;
@@ -161,14 +161,14 @@ namespace WarpImage
             return result;
         }
 
-        private Point[] ComputeVAndInterpolateXYRow(int iy)
+        private PointF[] ComputeVAndInterpolateXYRow(int iy)
         {
-            var result = new Point[ImgW];
+            var result = new PointF[ImgW];
 
             var ix1 = 0;
             var ix2 = 0;
-            var vX1 = new Point();
-            var vX2 = new Point();
+            var vX1 = new PointF();
+            var vX2 = new PointF();
 
             // Compute points V specified by vXCompute
             foreach (var ix in IndexX)
@@ -211,18 +211,18 @@ namespace WarpImage
                 {
                     // note! (double) needed to switch from int to double computing!!
                     var delta = (ix - ix1)/(double) (ix2 - ix1);
-                    var xInterpol = vX1.X*(1.0 - delta) + vX2.X*delta;
-                    var yInterpol = vX1.Y*(1.0 - delta) + vX2.Y*delta;
-                    result[ix] = new Point(xInterpol, yInterpol);
+                    var xInterpol = (float) (vX1.X*(1.0 - delta) + vX2.X*delta);
+                    var yInterpol = (float) (vX1.Y*(1.0 - delta) + vX2.Y*delta);
+                    result[ix] = new PointF(xInterpol, yInterpol);
                 }
             }
 
             return result;
         }
 
-        private Point[] InterpolateXYRow(int iy, int iy1, int iy2, Point[] xyRow1, Point[] xyRow2)
+        private PointF[] InterpolateXYRow(int iy, int iy1, int iy2, PointF[] xyRow1, PointF[] xyRow2)
         {
-            var result = new Point[ImgW];
+            var result = new PointF[ImgW];
 
             // note! (double) needed to switch from int to double computing!!
             var delta = (iy - iy1)/(double) (iy2 - iy1);
@@ -231,9 +231,9 @@ namespace WarpImage
             {
                 // refinement: (iy==iy1) return xyRow1, (iy==iy2) return xyRow2
 
-                var xInterpol = xyRow1[ix].X*(1.0 - delta) + xyRow2[ix].X*delta;
-                var yInterpol = xyRow1[ix].Y*(1.0 - delta) + xyRow2[ix].Y*delta;
-                result[ix] = new Point(xInterpol, yInterpol);
+                float xInterpol = (float) (xyRow1[ix].X*(1.0 - delta) + xyRow2[ix].X*delta);
+                float yInterpol = (float) (xyRow1[ix].Y*(1.0 - delta) + xyRow2[ix].Y*delta);
+                result[ix] = new PointF(xInterpol, yInterpol);
             }
             return result;
         }
@@ -241,7 +241,7 @@ namespace WarpImage
         // Simple but stupid interpolation for testing
         // (1-delta) + delta linear interpolation using bytes is is an art I know nothing about
         private PixelColor BilinearInterpolation
-            (PixelColor[,] PixelsOrg, Point coordOrg)
+            (PixelColor[,] PixelsOrg, PointF coordOrg)
         {
             // get pixl, set value ousidePixel
             // Note set Alpha=255 or you will be see transparant pixels ...

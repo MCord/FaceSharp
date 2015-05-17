@@ -15,10 +15,10 @@ namespace Studio.Common
     {
         private static readonly MovingLeastSquaresRectGrid _mls = new MovingLeastSquaresRectGrid();
 
-        private readonly List<Point> targetPointSet;
+        private readonly List<PointF> targetPointSet;
         private readonly int stepSize;
 
-        public WarpImageProcessor(List<Point> targetPointSet, int stepSize)
+        public WarpImageProcessor(List<PointF> targetPointSet, int stepSize)
         {
             this.targetPointSet = targetPointSet;
             this.stepSize = stepSize;
@@ -33,7 +33,7 @@ namespace Studio.Common
         {
             var sourcePoints = GetSourcePoints(features);
 
-            _mls.InitBeforeComputation(Convert(sourcePoints), Convert(targetPointSet), arg.Height, arg.Width, stepSize);
+            Execute(arg, sourcePoints);
 
             var convertBitmap = ConvertBitmap((Bitmap)arg);
             var pixels = Image2PixelArray.GetPixelsTopLeft(convertBitmap);
@@ -41,6 +41,26 @@ namespace Studio.Common
             var bmp = _mls.WarpImage(pixels, convertBitmap.DpiX, convertBitmap.DpiY);
 
             return new ProcessedImage(BitmapFromWriteableBitmap(bmp), features);
+        }
+
+        private void Execute(Image arg, PointF[] sourcePoints)
+        {
+            var from = Convert(sourcePoints);
+            var to = Convert(targetPointSet);
+
+
+            var fromFilter = new List<PointF>();
+            var toFilter = new List<PointF>();
+            for (int i = 0; i < from.Length; i++)
+            {
+                if (i != 22)
+                {
+                    fromFilter.Add(from[i]);
+                    toFilter.Add(to[i]);
+                }
+            }
+            _mls.InitBeforeComputation(fromFilter.ToArray(), toFilter.ToArray(), arg.Height, arg.Width, stepSize);
+
         }
 
         private Bitmap BitmapFromWriteableBitmap(WriteableBitmap writeBmp)
@@ -63,14 +83,14 @@ namespace Studio.Common
                 BitmapSizeOptions.FromEmptyOptions());
         }
 
-        private System.Windows.Point[] Convert(IEnumerable<Point> points)
+        private PointF[] Convert(IEnumerable<PointF> points)
         {
-            return points.Select(p => new System.Windows.Point(p.X, p.Y)).ToArray();
+            return points.Select(p => new PointF(p.X, p.Y)).ToArray();
         }
 
-        private Point[] GetSourcePoints(List<FacialFeature> features)
+        private PointF[] GetSourcePoints(List<FacialFeature> features)
         {
-            return features.Select(f => f.Location).ToArray();
+            return features.Select(f => new PointF(f.Location.X, f.Location.Y)).ToArray();
         }
     }
 }

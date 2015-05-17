@@ -62,6 +62,7 @@
     </ApplicationDefinition>
     <Compile Include="Common\AutoFaceTiltProcessor.cs" />
     <Compile Include="Common\FaceCenteredCropProcessor.cs" />
+    <Compile Include="Common\Geometry.cs" />
     <Compile Include="Common\IImageProcessor.cs" />
     <Compile Include="Common\ImageOpacityProcessor.cs" />
     <Compile Include="Common\ImageProcessing\Warp\Conversions.cs" />

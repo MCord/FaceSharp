@@ -1,4 +1,6 @@
-﻿namespace Studio
+﻿using System.IO;
+
+namespace Studio
 {
     using System;
     using System.Windows;

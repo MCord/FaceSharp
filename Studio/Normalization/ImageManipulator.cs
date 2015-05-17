@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -29,9 +30,23 @@ namespace Studio
             try
             {
                 log.Clear();
-                var images = Directory.GetFiles(settings.SourceFolder).Select(SourcedImage.FromFile).ToArray();
+
+                var images = new List<SourcedImage>();
+                foreach (var file in Directory.GetFiles(settings.SourceFolder))
+                {
+                    try
+                    {
+                        images.Add(SourcedImage.FromFile(file));
+                    }
+                    catch (Exception ex)
+                    {
+                        Log("Failed to load file {0} with {1}", file, ex.Message);
+                    }
+                }
+
+
                 Log("Found {0} source files.", images.Count());
-                NormalizeInternal(images);
+                NormalizeInternal(images.ToArray());
                 return log;
             }
             catch (Exception ex)
@@ -53,7 +68,7 @@ namespace Studio
 
             var facialNorm = FindFacialNorm(normalizedFiles).ToList();
 
-            var warper = new WarpImageProcessor(facialNorm, settings.StepSize);
+            var warper = new WarpImageProcessor(facialNorm, settings.WarpStep);
 
 
             foreach (var nf in normalizedFiles)
@@ -67,17 +82,21 @@ namespace Studio
             }
         }
 
-        private IEnumerable<Point> FindFacialNorm(List<string> normalizedFiles)
+        private IEnumerable<PointF> FindFacialNorm(List<string> normalizedFiles)
         {
             var featureSamples = new List<List<FacialFeature>>();
             foreach (var nf in normalizedFiles)
             {
                 var image = Image.FromFile(nf);
                 var facialFeatures = engine.ExtractFacialFutures(image).ToList();
-                featureSamples.Add(facialFeatures);
+
+                if (facialFeatures.Count > 0)
+                {
+                    featureSamples.Add(facialFeatures);
+                }
             }
 
-            return GetAverage(featureSamples).Select(f => f.Location);
+            return GetAverage(featureSamples).Select(f => new PointF(f.Location.X, f.Location.Y));
         }
 
         private List<string> NormalizeAndSave(SourcedImage[] images)
@@ -103,15 +122,27 @@ namespace Studio
                     continue;
                 }
 
-                var pi = processor.Process(new ProcessedImage(image.Image, features));
-
-                var fileName = Path.Combine(settings.TargetFolder, Path.GetFileName(image.Path) ?? Guid.NewGuid() + ".jpeg");
-                Log("Normalized {0}", image.Path);
-                normalizedFiles.Add(fileName);
-                pi.Save(fileName);
+                try
+                {
+                    Apply(processor, image, features, normalizedFiles);
+                }
+                catch (Exception ex)
+                {
+                    Log("Failed " + image.Path + " with " + ex.Message);
+                }
             }
 
             return normalizedFiles;
+        }
+
+        private void Apply(ImageProcessorChain processor, SourcedImage image, List<FacialFeature> features, List<string> normalizedFiles)
+        {
+            var pi = processor.Process(new ProcessedImage(image.Image, features));
+
+            var fileName = Path.Combine(settings.TargetFolder, Path.GetFileName(image.Path) ?? Guid.NewGuid() + ".jpeg");
+            Log("Normalized {0}", image.Path);
+            normalizedFiles.Add(fileName);
+            pi.Save(fileName);
         }
 
         private IEnumerable<FacialFeature> GetAverage(List<List<FacialFeature>> featureSamples)
@@ -126,8 +157,20 @@ namespace Studio
 
         private Point AveragePoint(int id, List<List<FacialFeature>> featureSamples)
         {
-            var filter = featureSamples.Select(fs => fs.First(i => i.Id == id).Location).ToList();
+            var filter = featureSamples.Select(fs => GetLocation(id, fs)).ToList();
             return new Point((int)filter.Average(f => f.X), (int)filter.Average(f => f.Y));
+        }
+
+        private static Point GetLocation(int id, List<FacialFeature> fs)
+        {
+            var facialFeature = fs.FirstOrDefault(i => i.Id == id);
+
+            if (facialFeature == null)
+            {
+                throw new NotImplementedException();
+            }
+
+            return facialFeature.Location;
         }
 
         public static List<string> NormalizeFromSettingFile(string file)

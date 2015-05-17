@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 
 namespace Studio.Common
@@ -20,11 +22,22 @@ namespace Studio.Common
         public ProcessedImage Process(ProcessedImage source)
         {
             var ratio = GetScaleRatio(source);
-
-            return source.Process(image => image.GetThumbnailImage((int) (image.Width*ratio),
-                (int) (image.Height*ratio), null, IntPtr.Zero),f=> ScaleFutures(f,ratio));
+            return source.Process(i=>Resize(i, ratio),f=> ScaleFutures(f,ratio));
         }
 
+        public static Image Resize(Image source, double rate)
+        {
+            Bitmap newImage = new Bitmap((int) (source.Width * rate), (int)(source.Height* rate));
+            using (Graphics gr = Graphics.FromImage(newImage))
+            {
+                gr.SmoothingMode = SmoothingMode.HighQuality;
+                gr.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                gr.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                gr.DrawImage(source, new Rectangle(0, 0, newImage.Width, newImage.Height));
+            }
+
+            return newImage;
+        }
         private List<FacialFeature> ScaleFutures(List<FacialFeature> arg, double ratio)
         {
             return arg.Select(a => a.Scale(ratio)).ToList();
