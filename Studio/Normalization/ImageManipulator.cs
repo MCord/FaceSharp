@@ -175,7 +175,9 @@ namespace Studio
 
         public static List<string> NormalizeFromSettingFile(string file)
         {
-            var im = new ImageManipulator(SerializationExtensions.Deserialize<NormalizationSetting>(file));
+            var normalizationSetting = SerializationExtensions.Deserialize<NormalizationSetting>(file);
+            Directory.CreateDirectory(normalizationSetting.TargetFolder);
+            var im = new ImageManipulator(normalizationSetting);
             return im.Normalize();
         }
     }

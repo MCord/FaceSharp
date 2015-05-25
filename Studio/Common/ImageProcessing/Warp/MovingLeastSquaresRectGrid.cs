@@ -67,7 +67,7 @@ namespace WarpImage
             var outsideImage = new PixelColor();
             outsideImage.Alpha = 100;
             outsideImage.Blue = 100;
-            outsideImage.Red = 100;
+            outsideImage.Red = 0;
             outsideImage.Green = 100;
 
             // .. Used for foreach loops, not so efficient, less error prone? 
@@ -114,6 +114,10 @@ namespace WarpImage
                     if ((iyRow2 < ImgH)) xyRow2 = ComputeVAndInterpolateXYRow(iyRow2);
                 }
 
+                if (iy == 612)
+                {
+                    Console.WriteLine("ss");
+                }
                 // Interpolate the current xyRow using known xyRow1 and xyRow2
                 xyRow = InterpolateXYRow(iy, iyRow1, iyRow2, xyRow1, xyRow2);
 
@@ -136,17 +140,15 @@ namespace WarpImage
 
                     // And place this value in PixelsOut[iy,ix]
 
-                    // Now hardcoped choice Nearest Neighbour or BilinearInterpolation...
-                    var useNN = false;
-                    if (useNN)
+                    
+
+                    if ((ixOrg < 0) || (ixOrg >= ImgW) || (iyOrg < 0) || (iyOrg >= ImgH))
                     {
-                        if ((ixOrg < 0) || (ixOrg >= ImgW) || (iyOrg < 0) || (iyOrg >= ImgH))
-                            // Outsite original image: default color
-                            PixelsOut[iy, ix] = outsideImage;
-                        else
-                            PixelsOut[iy, ix] = Pixels[iyOrg, ixOrg];
+                        PixelsOut[iy, ix] = outsideImage;
+                        
                     }
-                    else PixelsOut[iy, ix] = BilinearInterpolation(Pixels, coordOrg);
+                    else
+                        PixelsOut[iy, ix] = Pixels[iyOrg, ixOrg];
                 }
             }
 
@@ -213,6 +215,7 @@ namespace WarpImage
                     var delta = (ix - ix1)/(double) (ix2 - ix1);
                     var xInterpol = (float) (vX1.X*(1.0 - delta) + vX2.X*delta);
                     var yInterpol = (float) (vX1.Y*(1.0 - delta) + vX2.Y*delta);
+
                     result[ix] = new PointF(xInterpol, yInterpol);
                 }
             }
@@ -233,6 +236,7 @@ namespace WarpImage
 
                 float xInterpol = (float) (xyRow1[ix].X*(1.0 - delta) + xyRow2[ix].X*delta);
                 float yInterpol = (float) (xyRow1[ix].Y*(1.0 - delta) + xyRow2[ix].Y*delta);
+
                 result[ix] = new PointF(xInterpol, yInterpol);
             }
             return result;

@@ -77,7 +77,7 @@ namespace WarpImage
                 // Note: how do we deal p[i]=v(x,y)?
                 if (d < ToSmallHeuristic) d = ToSmallHeuristic;
 
-                w[i] = 1.0/d;
+                w[i] = Math.Abs(d) <= double.Epsilon ? 1 : 1.0/d;
                 wSum = wSum + w[i];
             }
             if (wSum < ToSmallHeuristic) wSum = ToSmallHeuristic;
