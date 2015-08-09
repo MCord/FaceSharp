@@ -43,6 +43,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -80,10 +81,16 @@
     <Compile Include="FaceDetection\FacialFeature.cs" />
     <Compile Include="FaceDetection\IFaceAnalyzer.cs" />
     <Compile Include="FaceDetection\LuxlandRecognitionEngine.cs" />
-    <Compile Include="Normalization\ImageManipulator.cs" />
+    <Compile Include="FaceWarpToolCommand.cs" />
+    <Compile Include="Interface\FaceWarpViewModel.cs" />
+    <Compile Include="Interface\FaceWarpWindow.xaml.cs">
+      <DependentUpon>FaceWarpWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Normalization\ImageSetNormalizer.cs" />
     <Compile Include="ImageUtils.cs" />
     <Compile Include="INormalization.cs" />
     <Compile Include="NormalizationToolCommand.cs" />
+    <Compile Include="Normalization\FaceWarperNormalizer.cs" />
     <Compile Include="Normalization\MoveNormalization.cs" />
     <Compile Include="Normalization\NormalizationSetting.cs" />
     <Compile Include="Normalization\RotationNormalization.cs" />
@@ -94,6 +101,10 @@
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="SerializationExtensions.cs" />
     <Compile Include="Storage.cs" />
+    <Page Include="Interface\FaceWarpWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

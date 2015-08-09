@@ -17,6 +17,7 @@
                 </MenuItem>
                 <MenuItem Header="_Tools">
                     <MenuItem Header="_Normalizer" Command="{Binding NomalizerToolCommand}" CommandParameter="{Binding Project}"/>
+                    <MenuItem Header="_FaceWarp" Command="{Binding FaceWarpToolCommand}" CommandParameter="{Binding Project}"/>
                 </MenuItem>
             </Menu>
             <StackPanel DockPanel.Dock="Left" >

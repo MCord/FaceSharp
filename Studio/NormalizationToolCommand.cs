@@ -22,7 +22,7 @@ namespace Studio
             {
                 if (ofd.ShowDialog().GetValueOrDefault())
                 {
-                    var log = ImageManipulator.NormalizeFromSettingFile(ofd.FileName);
+                    var log = ImageSetNormalizer.NormalizeFromSettingFile(ofd.FileName);
                     var temp = Path.GetTempFileName();
                     File.WriteAllLines(temp, log);
 

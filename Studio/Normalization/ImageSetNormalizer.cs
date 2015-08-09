@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -9,17 +8,17 @@ using Studio.Normalization;
 
 namespace Studio
 {
-    public class ImageManipulator
+    public class ImageSetNormalizer
     {
         private readonly NormalizationSetting settings;
         private readonly LuxlandRecognitionEngine engine;
-        private static List<string> log = new List<string>();
+        private static readonly List<string> log = new List<string>();
 
         private void Log(string format, params object[] args)
         {
             log.Add(string.Format(format, args));
         }
-        public ImageManipulator(NormalizationSetting settings)
+        public ImageSetNormalizer(NormalizationSetting settings)
         {
             this.settings = settings;
             engine = new LuxlandRecognitionEngine();
@@ -32,7 +31,7 @@ namespace Studio
                 log.Clear();
 
                 var images = new List<SourcedImage>();
-                foreach (var file in Directory.GetFiles(settings.SourceFolder))
+                foreach (var file in settings.GetSourceFiles())
                 {
                     try
                     {
@@ -77,7 +76,7 @@ namespace Studio
                 var image = Image.FromFile(nf);
                 var facialFeatures = engine.ExtractFacialFutures(image).ToList();
                 var pi = new ProcessedImage(image, facialFeatures);
-                var warpedFileName = string.Format("{0}.warped.jpeg", nf);
+                var warpedFileName = $"{nf}.warped.jpeg";
                 warper.Process(pi).Save(warpedFileName);
             }
         }
@@ -139,7 +138,7 @@ namespace Studio
         {
             var pi = processor.Process(new ProcessedImage(image.Image, features));
 
-            var fileName = Path.Combine(settings.TargetFolder, Path.GetFileName(image.Path) ?? Guid.NewGuid() + ".jpeg");
+            var fileName = settings.GetOutputFileName(image.Path);
             Log("Normalized {0}", image.Path);
             normalizedFiles.Add(fileName);
             pi.Save(fileName);
@@ -149,10 +148,12 @@ namespace Studio
         {
             var first = featureSamples.First();
 
-            foreach (var f in first)
-            {
-                yield return new FacialFeature(f.Id, f.Name, AveragePoint(f.Id, featureSamples));
-            }
+            return first.Select(f => CalulateAverageTargetForPoint(featureSamples, f));
+        }
+
+        protected virtual FacialFeature CalulateAverageTargetForPoint(List<List<FacialFeature>> featureSamples, FacialFeature f)
+        {
+            return new FacialFeature(f.Id, f.Name, AveragePoint(f.Id, featureSamples));
         }
 
         private Point AveragePoint(int id, List<List<FacialFeature>> featureSamples)
@@ -177,7 +178,7 @@ namespace Studio
         {
             var normalizationSetting = SerializationExtensions.Deserialize<NormalizationSetting>(file);
             Directory.CreateDirectory(normalizationSetting.TargetFolder);
-            var im = new ImageManipulator(normalizationSetting);
+            var im = new ImageSetNormalizer(normalizationSetting);
             return im.Normalize();
         }
     }

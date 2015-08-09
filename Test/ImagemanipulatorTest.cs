@@ -18,7 +18,7 @@ namespace Test
 
             settings.SerializeToFile(@"H:\Norm.xml");
 
-            var im = new ImageManipulator(settings);
+            var im = new ImageSetNormalizer(settings);
             im.Normalize();
         }
     }
