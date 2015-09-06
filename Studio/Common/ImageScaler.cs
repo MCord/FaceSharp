@@ -28,6 +28,7 @@ namespace Studio.Common
         public static Image Resize(Image source, double rate)
         {
             Bitmap newImage = new Bitmap((int) (source.Width * rate), (int)(source.Height* rate));
+            newImage.SetResolution(source.HorizontalResolution,source.VerticalResolution);
             using (Graphics gr = Graphics.FromImage(newImage))
             {
                 gr.SmoothingMode = SmoothingMode.HighQuality;

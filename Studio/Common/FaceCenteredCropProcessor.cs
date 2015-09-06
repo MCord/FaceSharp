@@ -21,7 +21,9 @@ namespace Studio.Common
         private Image DrawImage(Image original, Point faceCenter)
         {
             var result = new Bitmap(imageSize, imageSize, PixelFormat.Format32bppArgb);
-            var g = System.Drawing.Graphics.FromImage(result);
+            result.SetResolution(original.HorizontalResolution, original.VerticalResolution);
+
+            var g = Graphics.FromImage(result);
             g.FillRectangle(new HatchBrush(HatchStyle.LargeCheckerBoard, Color.WhiteSmoke), 0, 0, result.Width, result.Height);
 
             var resultCenter = new Point(imageSize / 2, imageSize / 2);

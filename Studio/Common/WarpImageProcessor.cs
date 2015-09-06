@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Xml.Serialization;
 using WarpImage;
@@ -73,11 +74,24 @@ namespace Studio.Common
 
         private static BitmapSource ConvertBitmap(Bitmap source)
         {
-            return System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
-                source.GetHbitmap(),
-                IntPtr.Zero,
-                Int32Rect.Empty,
-                BitmapSizeOptions.FromEmptyOptions());
+
+            Rectangle rect = new Rectangle(0, 0, source.Width, source.Height);
+
+            System.Drawing.Imaging.BitmapData bmpData = source.LockBits(rect, System.Drawing.Imaging.ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
+
+            int bufferSize = bmpData.Stride * source.Height;
+
+            WriteableBitmap wb = new WriteableBitmap(source.Width, source.Height, source.HorizontalResolution, source.VerticalResolution, PixelFormats.Bgr32, null);
+
+            wb.WritePixels(new Int32Rect(0, 0, source.Width, source.Height), bmpData.Scan0, bufferSize, bmpData.Stride);
+
+            // Unlock the bits.
+
+            source.UnlockBits(bmpData);
+
+
+            return wb;
+
         }
 
         private static PointF[] Convert(IEnumerable<PointF> points)
