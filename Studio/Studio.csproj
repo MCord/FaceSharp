@@ -81,11 +81,17 @@
     <Compile Include="FaceDetection\FacialFeature.cs" />
     <Compile Include="FaceDetection\IFaceAnalyzer.cs" />
     <Compile Include="FaceDetection\LuxlandRecognitionEngine.cs" />
+    <Compile Include="FaceOffToolCommand.cs" />
     <Compile Include="FaceWarpToolCommand.cs" />
+    <Compile Include="Interface\FaceOffViewModel.cs" />
+    <Compile Include="Interface\FaceOffWindow.xaml.cs">
+      <DependentUpon>FaceOffWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Interface\FaceWarpViewModel.cs" />
     <Compile Include="Interface\FaceWarpWindow.xaml.cs">
       <DependentUpon>FaceWarpWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Normalization\FaceoffNormalizer.cs" />
     <Compile Include="Normalization\ImageSetNormalizer.cs" />
     <Compile Include="ImageUtils.cs" />
     <Compile Include="INormalization.cs" />
@@ -101,6 +107,10 @@
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="SerializationExtensions.cs" />
     <Compile Include="Storage.cs" />
+    <Page Include="Interface\FaceOffWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Interface\FaceWarpWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -20,6 +20,7 @@
         public ICommand NomalizeCommand => new NormalizationCommand();
         public ICommand NomalizerToolCommand => new NormalizationToolCommand();
         public ICommand FaceWarpToolCommand => new FaceWarpToolCommand();
+        public ICommand FaceOffToolCommand=> new FaceOffToolCommand();
 
         private void CalculateRatio()
         {

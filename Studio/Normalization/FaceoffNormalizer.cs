@@ -1,35 +1,27 @@
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using Studio.Normalization;
-
 namespace Studio
 {
-    class FaceWarperNormalizer : ImageSetNormalizer
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using Normalization;
+
+    class FaceoffNormalizer : ImageSetNormalizer
     {
-        public FaceWarperNormalizer(string refFile,string normFile, string targetFolder) : base(new WarperSetting(refFile, normFile, targetFolder))
+        private readonly int[] s2;
+
+        public FaceoffNormalizer(string refFile, string normFile, string targetFolder, int[] s2) : base(new WarperSetting(refFile, normFile, targetFolder))
         {
+            this.s2 = s2;
         }
-
-        private readonly List<FacialFeature> pointsStorage = new List<FacialFeature>();
-
-        private readonly int[] pointsToLock = {0,1,24,23,38,27,37,35,28,36,29,30,25,26,41,31,42,40,32,39,33,34};
 
         protected override FacialFeature CalulateAverageTargetForPoint(List<List<FacialFeature>> featureSamples, FacialFeature f)
         {
-            if (pointsToLock.Contains(f.Id))
+            if (s2.Contains(f.Id))
             {
-                var cache = pointsStorage.FirstOrDefault(p => p.Id == f.Id);
-                if (cache != null)
-                {
-                    return cache;
-                }
-
-                pointsStorage.Add(f);
-                return f;
+                return featureSamples[1].First(p => p.Id == f.Id);
             }
 
-            return base.CalulateAverageTargetForPoint(featureSamples, f);
+            return f;
         }
 
         private class WarperSetting : NormalizationSetting
